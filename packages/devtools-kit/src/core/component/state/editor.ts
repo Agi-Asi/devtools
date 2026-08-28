@@ -28,8 +28,15 @@ export class StateEditor {
       else object = object[section] as Recordable
       if (this.refEditor.isRef(object))
         object = this.refEditor.get(object)
+      // The path may not exist on the object (e.g. when editing a Pinia store
+      // from the component inspector). Stop instead of throwing a TypeError
+      // on `undefined[field]`.
+      if (object == null)
+        return
     }
     const field = sections[0]
+    if (object == null)
+      return
     const item = this.refEditor.get(object)[field]
     if (cb) {
       cb(object, field, value)

@@ -89,6 +89,21 @@ describe('editor: StateEditor.set', () => {
     })
   })
 
+  describe('editComponentState: non-existing path should not throw', () => {
+    // https://github.com/vuejs/devtools/issues/906
+    it('does not throw when the path points to an undefined value', () => {
+      const target = { foo: 'bar' }
+      const state = { newKey: '', type: '', value: 'baz' }
+      const defaultCallback = stateEditor.createDefaultSetCallback(state)
+      // `bar` does not exist on `target`, so traversal would previously hit
+      // `undefined[field]` and throw a TypeError.
+      expect(() => {
+        stateEditor.set(target, 'bar.baz', 'qux', defaultCallback)
+      }).not.toThrow()
+      expect(target).toEqual({ foo: 'bar' })
+    })
+  })
+
   describe('editComponentState: array', () => {
     it('modify value', () => {
       const target = ['foo', 'bar']
