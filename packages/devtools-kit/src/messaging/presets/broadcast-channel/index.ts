@@ -16,6 +16,11 @@ export function createBroadcastChannel(): MergeableChannelOptions {
     },
     on: (handler) => {
       channel.onmessage = (event) => {
+        // The channel can receive payloads that are not JSON strings (e.g. an
+        // object) when it is shared with other code. Parsing a non-string
+        // value throws `SyntaxError: "[object Object]" is not valid JSON`.
+        if (typeof event.data !== 'string')
+          return
         const parsed = SuperJSON.parse<{ event: string, data: unknown }>(event.data)
         if (parsed.event === __DEVTOOLS_KIT_BROADCAST_MESSAGING_EVENT_KEY) {
           handler(parsed.data)
