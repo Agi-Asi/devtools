@@ -153,7 +153,7 @@ function quickEditNum(v: number | string, offset: 1 | -1) {
           >
             <template #icon>
               <VueIcon icon="i-material-symbols-copy-all-rounded" class="mt4px" />
-              Copy Path
+              Copy Key
             </template>
           </VueDropdownButton>
         </div>
