@@ -10,6 +10,10 @@ export function createViteServerChannel(): MergeableChannelOptions {
   return {
     post: data => ws?.send(__DEVTOOLS_KIT_VITE_MESSAGING_EVENT_KEY, SuperJSON.stringify(data)),
     on: handler => ws?.on(__DEVTOOLS_KIT_VITE_MESSAGING_EVENT_KEY, (event) => {
+      // Only parse string payloads; parsing an object/other value throws
+      // `SyntaxError: "[object Object]" is not valid JSON`.
+      if (typeof event !== 'string')
+        return
       handler(SuperJSON.parse(event))
     }),
   }

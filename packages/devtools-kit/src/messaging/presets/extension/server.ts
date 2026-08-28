@@ -12,7 +12,7 @@ export function createExtensionServerChannel(): MergeableChannelOptions {
     },
     on: (handler) => {
       const listener = (event: MessageEvent) => {
-        if (event.data.source === __DEVTOOLS_KIT_EXTENSION_MESSAGING_EVENT_KEY__.PROXY_TO_SERVER && event.data.payload) {
+        if (event.data.source === __DEVTOOLS_KIT_EXTENSION_MESSAGING_EVENT_KEY__.PROXY_TO_SERVER && typeof event.data.payload === 'string') {
           handler(SuperJSON.parse(event.data.payload))
         }
       }
