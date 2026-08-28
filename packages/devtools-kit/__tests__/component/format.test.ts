@@ -25,6 +25,17 @@ describe('format: displayText and rawValue can be calculated by formatInspectorS
     })
   })
 
+  it('type: string value "undefined" should be treated as a string, not null', () => {
+    // https://github.com/vuejs/devtools/issues/1087
+    const value = 'undefined'
+    const displayText = format.formatInspectorStateValue(value)
+    const rawValue = format.getRaw(value).value
+
+    expect(displayText).toBe('undefined')
+    expect(rawValue).toBe('undefined')
+    expect(format.getInspectorStateValueType(value)).toBe('string')
+  })
+
   it('type: plain object', () => {
     const value = { foo: 'bar' }
     const displayText = format.formatInspectorStateValue(value)
